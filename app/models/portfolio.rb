@@ -5,6 +5,8 @@ class Portfolio < ApplicationRecord
     scope :ruby_on_rails, -> { where("title LIKE '%Ruby on Rails%'") }
     scope :react, -> { where("title LIKE '%React%'") }
 
+    has_many :technologies
+
     after_initialize :set_defaults
 
     def set_defaults
