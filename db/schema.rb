@@ -10,10 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_07_191913) do
+ActiveRecord::Schema.define(version: 2022_01_18_195125) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "hstore"
+  enable_extension "pg_trgm"
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
+  enable_extension "postgis"
+  enable_extension "postgis_topology"
+  enable_extension "tablefunc"
+  enable_extension "uuid-ossp"
 
   create_table "blogs", force: :cascade do |t|
     t.string "title"
@@ -22,7 +29,9 @@ ActiveRecord::Schema.define(version: 2022_01_07_191913) do
     t.datetime "updated_at", null: false
     t.string "slug"
     t.integer "status", default: 0
+    t.bigint "topic_id"
     t.index ["slug"], name: "index_blogs_on_slug", unique: true
+    t.index ["topic_id"], name: "index_blogs_on_topic_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -51,6 +60,30 @@ ActiveRecord::Schema.define(version: 2022_01_07_191913) do
     t.integer "percent_utilized"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "badge"
   end
 
+  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
+    t.string "auth_name", limit: 256
+    t.integer "auth_srid"
+    t.string "srtext", limit: 2048
+    t.string "proj4text", limit: 2048
+  end
+
+  create_table "technologies", force: :cascade do |t|
+    t.string "name"
+    t.bigint "portfolio_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["portfolio_id"], name: "index_technologies_on_portfolio_id"
+  end
+
+  create_table "topics", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "blogs", "topics"
+  add_foreign_key "technologies", "portfolios"
 end
