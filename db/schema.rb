@@ -10,17 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_18_195125) do
+ActiveRecord::Schema.define(version: 2022_03_04_043744) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "hstore"
-  enable_extension "pg_trgm"
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
-  enable_extension "postgis"
-  enable_extension "postgis_topology"
-  enable_extension "tablefunc"
-  enable_extension "uuid-ossp"
 
   create_table "blogs", force: :cascade do |t|
     t.string "title"
@@ -63,13 +56,6 @@ ActiveRecord::Schema.define(version: 2022_01_18_195125) do
     t.text "badge"
   end
 
-  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
-    t.string "auth_name", limit: 256
-    t.integer "auth_srid"
-    t.string "srtext", limit: 2048
-    t.string "proj4text", limit: 2048
-  end
-
   create_table "technologies", force: :cascade do |t|
     t.string "name"
     t.bigint "portfolio_id"
@@ -82,6 +68,24 @@ ActiveRecord::Schema.define(version: 2022_01_18_195125) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "name"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "blogs", "topics"
