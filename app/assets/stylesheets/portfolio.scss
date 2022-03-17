@@ -1,3 +1,9 @@
 body{
     background-color: pink;
+
+    .nav-top{
+        ul > li > a{
+            color: salmon;
+        }
+    }
 }

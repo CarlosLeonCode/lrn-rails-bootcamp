@@ -1,3 +1,9 @@
 body{
     background-color: orange;
+
+    .nav-bottom{
+        ul > li > a{
+            color: lawngreen;
+        }
+    }
 }
